@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DynaPix Photo Frame — Quick Setup Guide</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #222; }
+.brand { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+.brand img { width: 72px; height: 72px; }
+.brand-title { font-size: 28px; font-weight: 700; color: #16808a; margin: 0; }
+.brand-sub { font-size: 14px; color: #666; margin: 0; }
+h1, h2, h3 { color: #16808a; }
+h1 { border-bottom: 2px solid #16808a; padding-bottom: 10px; }
+table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+th { background: #f2f2f2; }
+code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; }
+hr { border: none; border-top: 1px solid #ddd; margin: 2em 0; }
+</style>
+</head>
+<body>
+<div class="brand">
+  <img src="dynapix_logo.svg" alt="DynaPix logo">
+  <div>
+    <p class="brand-title">DynaPix</p>
+    <p class="brand-sub">E-Paper Studio</p>
+  </div>
+</div>
+<h1 id="dynapix-photo-frame-quick-setup-guide">DynaPix Photo Frame — Quick Setup Guide</h1>
+<p>Get your DynaPix frame online and showing photos in about 10 minutes.</p>
+<hr />
+<h2 id="what-you-need">What you need</h2>
+<ul>
+<li>DynaPix Photo Frame (ESP32-S3 + Waveshare 4" E6 e-paper display)</li>
+<li>USB-C power supply (5 V)</li>
+<li>A phone, tablet, or computer with Wi-Fi</li>
+</ul>
+<hr />
+<h2 id="1-power-on-the-frame">1. Power on the frame</h2>
+<p>Plug the USB-C cable into the frame. The display may stay blank for a few seconds while the ESP32 boots; this is normal because e-paper retains the last image.</p>
+<p>Wait until the activity LED settles and the fallback access point is active (about 10–20 seconds).</p>
+<hr />
+<h2 id="2-connect-to-the-fallback-wi-fi">2. Connect to the fallback Wi-Fi</h2>
+<p>On your phone or computer, open Wi-Fi settings and connect to:</p>
+<ul>
+<li><strong>Network name (SSID):</strong> <code>DynaPix-EPaper</code></li>
+<li><strong>Password:</strong> <code>dynapix6</code></li>
+</ul>
+<p>The frame is now acting as a temporary access point so you can configure it.</p>
+<hr />
+<h2 id="3-open-the-dynapix-web-ui">3. Open the DynaPix web UI</h2>
+<p>Open a web browser and go to one of these addresses:</p>
+<ul>
+<li><code>http://dynapix.local</code></li>
+<li><code>http://192.168.4.1</code></li>
+</ul>
+<p>If <code>dynapix.local</code> does not resolve, use the IP address.</p>
+<hr />
+<h2 id="4-configure-your-home-wi-fi">4. Configure your home Wi-Fi</h2>
+<ol>
+<li>Tap <strong>Settings</strong> in the bottom navigation bar.</li>
+<li>Tap <strong>Scan Wi-Fi</strong>.</li>
+<li>Select your home network from the dropdown.</li>
+<li>The <strong>Wi-Fi name</strong> field fills in automatically.</li>
+<li>Type your Wi-Fi password.</li>
+<li>Tap <strong>Save Wi-Fi</strong>.</li>
+</ol>
+<p>The frame restarts and joins your home network. The saved credentials survive power outages.</p>
+<blockquote>
+<p><strong>Tip:</strong> If your network has no password, check <strong>This is an open network</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="5-reconnect-to-the-frame-on-your-home-network">5. Reconnect to the frame on your home network</h2>
+<p>After the frame restarts:</p>
+<ol>
+<li>Reconnect your phone/computer to your home Wi-Fi.</li>
+<li>Open <code>http://dynapix.local</code> (or the frame's IP shown on the Settings page).</li>
+</ol>
+<hr />
+<h2 id="6-upload-your-first-photos">6. Upload your first photos</h2>
+<ol>
+<li>Tap <strong>＋ Add Photos</strong>.</li>
+<li>Tap or drag photos into the drop zone.</li>
+<li>Supported formats: HEIC, HEIF, JPG, PNG, WebP, BMP, AVIF</li>
+<li>Use the preview and quality sliders if you want to adjust the look.</li>
+<li>Tap <strong>Convert &amp; Upload All</strong>.</li>
+</ol>
+<p>Wait for the conversion and upload to complete. A 120 KB file is sent to the frame for each photo.</p>
+<hr />
+<h2 id="7-start-the-slideshow">7. Start the slideshow</h2>
+<ol>
+<li>Tap <strong>▣ Library</strong>.</li>
+<li>Select the photos you want to show, or tap <strong>Select All</strong>.</li>
+<li>Tap <strong>▷ Start</strong>.</li>
+</ol>
+<p>The frame begins cycling through the selected photos. The default interval is 5 minutes.</p>
+<hr />
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li>Change the device name or hostname in <strong>Settings</strong>.</li>
+<li>Create photo categories in <strong>Library → Categories</strong>.</li>
+<li>Try the <strong>Clock &amp; Weather</strong> or <strong>Calendar</strong> extensions.</li>
+<li>See the <strong>Full User Manual</strong> for detailed settings and troubleshooting.</li>
+</ul>
+<hr />
+<h2 id="quick-troubleshooting">Quick troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Quick fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cannot open <code>dynapix.local</code></td>
+<td>Use <code>http://192.168.4.1</code> while connected to <code>DynaPix-EPaper</code>, or check your router for the frame's IP.</td>
+</tr>
+<tr>
+<td>Upload fails or stalls</td>
+<td>Make sure the photo file is valid and the frame has free storage (shown in Library).</td>
+</tr>
+<tr>
+<td>Slideshow will not start</td>
+<td>Select at least one photo in the Library first.</td>
+</tr>
+<tr>
+<td>Display stays blank</td>
+<td>E-paper only refreshes when a new image is requested. Start the slideshow or display a photo manually.</td>
+</tr>
+<tr>
+<td>Forgot Wi-Fi settings</td>
+<td>A factory reset wipes all settings; you will reconnect via <code>DynaPix-EPaper</code> and reconfigure.</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

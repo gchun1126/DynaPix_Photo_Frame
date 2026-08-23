@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DynaPix Photo Frame — Full User Manual</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #222; }
+.brand { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+.brand img { width: 72px; height: 72px; }
+.brand-title { font-size: 28px; font-weight: 700; color: #16808a; margin: 0; }
+.brand-sub { font-size: 14px; color: #666; margin: 0; }
+h1, h2, h3 { color: #16808a; }
+h1 { border-bottom: 2px solid #16808a; padding-bottom: 10px; }
+table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+th { background: #f2f2f2; }
+code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; }
+hr { border: none; border-top: 1px solid #ddd; margin: 2em 0; }
+</style>
+</head>
+<body>
+<div class="brand">
+  <img src="dynapix_logo.svg" alt="DynaPix logo">
+  <div>
+    <p class="brand-title">DynaPix</p>
+    <p class="brand-sub">E-Paper Studio</p>
+  </div>
+</div>
+<h1 id="dynapix-photo-frame-full-user-manual">DynaPix Photo Frame — Full User Manual</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li>Introduction</li>
+<li>Hardware Overview</li>
+<li>First-Time Setup</li>
+<li>Web Interface Overview</li>
+<li>Photo Upload &amp; Conversion</li>
+<li>Library Management</li>
+<li>Categories</li>
+<li>Slideshow</li>
+<li>Extensions</li>
+<li>Settings</li>
+<li>Maintenance</li>
+<li>Storage &amp; Limits</li>
+<li>Troubleshooting</li>
+<li>Safety &amp; Care</li>
+</ol>
+<hr />
+<h2 id="1-introduction">1. Introduction</h2>
+<p>DynaPix Photo Frame is a Wi-Fi connected, six-color e-paper photo frame built around an ESP32-S3 and a Waveshare 4" E Ink Spectra 6 (E6) display. The frame stores up to 90 photos locally in its internal flash memory and cycles through them as a slideshow.</p>
+<p>All management is done through a self-hosted web interface. You do not need an app or a cloud account. The frame can also show optional dashboards: a clock/weather display or a calendar agenda.</p>
+<hr />
+<h2 id="2-hardware-overview">2. Hardware Overview</h2>
+<h3 id="specifications">Specifications</h3>
+<ul>
+<li><strong>Controller:</strong> ESP32-S3 N16R8</li>
+<li><strong>Display:</strong> Waveshare 4" E Ink Spectra 6, 600 × 400 pixels, six colors</li>
+<li><strong>Storage:</strong> Internal flash via LittleFS (partition size depends on firmware partition table)</li>
+<li><strong>Connectivity:</strong> 2.4 GHz Wi-Fi (802.11 b/g/n)</li>
+<li><strong>Power:</strong> 5 V USB-C</li>
+</ul>
+<h3 id="display-colors">Display colors</h3>
+<p>The panel can render six colors:</p>
+<ul>
+<li>Black</li>
+<li>White</li>
+<li>Yellow</li>
+<li>Red</li>
+<li>Blue</li>
+<li>Green</li>
+</ul>
+<p>There are no intermediate colors. The converter uses dithering to approximate intermediate tones by scattering these six inks.</p>
+<h3 id="orientation">Orientation</h3>
+<p>The frame is designed for landscape mounting. The connector can be on the left or right side. The setting is in <strong>Settings → Panel mount</strong>.</p>
+<hr />
+<h2 id="3-first-time-setup">3. First-Time Setup</h2>
+<h3 id="power-on">Power on</h3>
+<p>Connect a 5 V USB-C power supply. The frame boots in about 10–20 seconds and starts the fallback access point.</p>
+<h3 id="connect-to-fallback-ap">Connect to fallback AP</h3>
+<p>On your device, connect to:</p>
+<ul>
+<li>SSID: <code>DynaPix-EPaper</code></li>
+<li>Password: <code>dynapix6</code></li>
+</ul>
+<h3 id="open-the-web-ui">Open the web UI</h3>
+<p>Visit:</p>
+<ul>
+<li><code>http://dynapix.local</code></li>
+<li><code>http://192.168.4.1</code> (fallback AP IP)</li>
+</ul>
+<h3 id="configure-wi-fi">Configure Wi-Fi</h3>
+<ol>
+<li>Go to <strong>Settings</strong>.</li>
+<li>Tap <strong>Scan Wi-Fi</strong>.</li>
+<li>Select your network.</li>
+<li>Enter the password.</li>
+<li>Tap <strong>Save Wi-Fi</strong>.</li>
+</ol>
+<p>The frame restarts and joins your network. Credentials are saved in flash and survive power loss.</p>
+<h3 id="reconnect">Reconnect</h3>
+<p>After the restart, connect your own device back to your home network and open <code>http://dynapix.local</code>.</p>
+<hr />
+<h2 id="4-web-interface-overview">4. Web Interface Overview</h2>
+<p>The web interface has four main tabs:</p>
+<table>
+<thead>
+<tr>
+<th>Tab</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>＋ Add Photos</strong></td>
+<td>Upload and convert new photos</td>
+</tr>
+<tr>
+<td><strong>▣ Library</strong></td>
+<td>Manage existing photos, categories, and slideshow selection</td>
+</tr>
+<tr>
+<td><strong>◷ Extensions</strong></td>
+<td>Enable clock/weather or calendar dashboards</td>
+</tr>
+<tr>
+<td><strong>⚙ Settings</strong></td>
+<td>Wi-Fi, device name, hostname, panel mount, factory reset</td>
+</tr>
+</tbody>
+</table>
+<h3 id="header">Header</h3>
+<p>The top bar shows the device name and connection status. The status updates every few seconds.</p>
+<h3 id="mobile-layout">Mobile layout</h3>
+<p>On narrow screens, the navigation bar moves to the bottom for thumb access.</p>
+<hr />
+<h2 id="5-photo-upload-conversion">5. Photo Upload &amp; Conversion</h2>
+<h3 id="supported-source-formats">Supported source formats</h3>
+<ul>
+<li>HEIC / HEIF</li>
+<li>JPG / JPEG</li>
+<li>PNG</li>
+<li>WebP</li>
+<li>BMP</li>
+<li>AVIF</li>
+</ul>
+<p>The browser performs the conversion; iPhone Safari is recommended for HEIC support.</p>
+<h3 id="upload-workflow">Upload workflow</h3>
+<ol>
+<li>Tap <strong>＋ Add Photos</strong>.</li>
+<li>Select one or more images via the file picker, or drag files onto the drop zone.</li>
+<li>Each image appears as a thumbnail in the pending strip.</li>
+<li>Tap a thumbnail to select it and adjust:</li>
+<li>Zoom</li>
+<li>Position (drag inside the preview)</li>
+<li>Rotation</li>
+<li>Quality preset</li>
+<li>Fit mode</li>
+<li>Dithering mode</li>
+<li>Advanced tone controls</li>
+<li>Tap <strong>Convert &amp; Upload All</strong>.</li>
+</ol>
+<h3 id="quality-presets">Quality presets</h3>
+<table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vivid</td>
+<td>Bright, punchy images</td>
+</tr>
+<tr>
+<td>Natural</td>
+<td>Accurate, balanced colors</td>
+</tr>
+<tr>
+<td>Portrait</td>
+<td>Skin tones and faces</td>
+</tr>
+<tr>
+<td>Graphics</td>
+<td>Logos, text, and flat illustrations</td>
+</tr>
+<tr>
+<td>Detail (default)</td>
+<td>Maximum fine detail</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fit-modes">Fit modes</h3>
+<ul>
+<li><strong>Fill and crop:</strong> Fills the 600 × 400 frame and crops excess.</li>
+<li><strong>Fit entire photo:</strong> Scales to fit without cropping; may leave white bars.</li>
+<li><strong>Stretch:</strong> Distorts to exactly 600 × 400.</li>
+</ul>
+<h3 id="dithering-modes">Dithering modes</h3>
+<ul>
+<li><strong>Smart serpentine:</strong> Floyd–Steinberg error diffusion with alternating scan direction.</li>
+<li><strong>Bright Atkinson:</strong> Atkinson dithering, often gives a brighter, more localized look.</li>
+<li><strong>Clean:</strong> No dithering. Fastest, but limited tonal range.</li>
+</ul>
+<h3 id="advanced-controls">Advanced controls</h3>
+<p>Available in the <strong>Advanced quality controls</strong> section:</p>
+<ul>
+<li>Brightness</li>
+<li>Contrast</li>
+<li>Saturation</li>
+<li>Vibrance</li>
+<li>Shadow detail</li>
+<li>Highlight protection</li>
+<li>Sharpness</li>
+<li>Dither strength</li>
+<li>Color style</li>
+<li>Edge protection</li>
+</ul>
+<h3 id="batch-actions">Batch actions</h3>
+<p>After queuing photos:</p>
+<ul>
+<li><strong>Retry Failed:</strong> Re-attempts any failed conversions.</li>
+<li><strong>Remove Completed:</strong> Removes successfully uploaded items from the queue.</li>
+<li><strong>Clear Queue:</strong> Removes all pending items.</li>
+</ul>
+<hr />
+<h2 id="6-library-management">6. Library Management</h2>
+<p>The <strong>Library</strong> tab lists all stored photos.</p>
+<h3 id="selecting-photos">Selecting photos</h3>
+<p>Click the checkbox on a photo card to include it in the slideshow. The status bar shows how many are selected.</p>
+<h3 id="batch-actions_1">Batch actions</h3>
+<p>When one or more photos are selected, a floating selection bar appears:</p>
+<ul>
+<li><strong>Select all</strong></li>
+<li><strong>Deselect all</strong></li>
+<li><strong>Delete selected</strong></li>
+<li><strong>Assign categories</strong></li>
+</ul>
+<h3 id="reordering">Reordering</h3>
+<p>Tap <strong>Reorder</strong> to drag photos into the desired sequence. Sequential slideshow mode respects this order.</p>
+<h3 id="rename">Rename</h3>
+<p>Tap the menu button on a photo card and choose <strong>Rename</strong>.</p>
+<h3 id="delete">Delete</h3>
+<ul>
+<li>Delete a single photo from its menu.</li>
+<li>Delete many photos with the batch <strong>Delete selected</strong> button.</li>
+</ul>
+<h3 id="preview">Preview</h3>
+<p>Click a photo's canvas in the Library to display it immediately on the frame (if the display is not busy).</p>
+<hr />
+<h2 id="7-categories">7. Categories</h2>
+<p>Categories let you group photos and run filtered slideshows.</p>
+<h3 id="creating-categories">Creating categories</h3>
+<ol>
+<li>In the Library, tap <strong>Categories</strong>.</li>
+<li>Tap <strong>New category</strong>.</li>
+<li>Enter a name and pick a color.</li>
+</ol>
+<h3 id="assigning-categories">Assigning categories</h3>
+<ol>
+<li>Select photos in the Library.</li>
+<li>Tap <strong>Assign categories</strong> in the selection bar.</li>
+<li>Choose <strong>Add</strong>, <strong>Remove</strong>, or <strong>Replace</strong> and pick the category.</li>
+</ol>
+<h3 id="slideshow-filtering">Slideshow filtering</h3>
+<p>In <strong>Slideshow settings</strong>, choose:</p>
+<ul>
+<li><strong>Category filter:</strong> Only include photos from selected categories.</li>
+<li><strong>Match mode:</strong></li>
+<li><strong>Any:</strong> Photo matches if it belongs to at least one selected category.</li>
+<li><strong>All:</strong> Photo matches only if it belongs to every selected category.</li>
+</ul>
+<h3 id="uncategorized">Uncategorized</h3>
+<p>Photos with no category can be filtered using the special <strong>Uncategorized</strong> option.</p>
+<hr />
+<h2 id="8-slideshow">8. Slideshow</h2>
+<p>The slideshow cycles through selected photos automatically.</p>
+<h3 id="controls">Controls</h3>
+<ul>
+<li><strong>Start / Pause</strong></li>
+<li><strong>Previous</strong></li>
+<li><strong>Next</strong></li>
+</ul>
+<p>The <strong>Previous</strong> button uses a history of recently shown photos when available; otherwise it picks the previous eligible photo in sequence.</p>
+<h3 id="settings">Settings</h3>
+<p>Tap <strong>Slideshow settings</strong> to expand:</p>
+<ul>
+<li><strong>Cycle interval:</strong> How long each photo stays on screen. Minimum 30 seconds.</li>
+<li><strong>Playback order:</strong></li>
+<li><strong>Sequential:</strong> Follows the Library order.</li>
+<li><strong>Shuffle:</strong> Random order without repeats until all eligible photos have been shown.</li>
+<li><strong>Category filter:</strong> Limit the slideshow to selected categories.</li>
+<li><strong>Match mode:</strong> Any / All.</li>
+</ul>
+<h3 id="eligibility">Eligibility</h3>
+<p>A photo must be:</p>
+<ul>
+<li>Stored on the frame</li>
+<li>Selected in the Library</li>
+<li>Matching the current category filter</li>
+</ul>
+<p>If no photos are eligible, the slideshow pauses automatically.</p>
+<h3 id="display-behavior">Display behavior</h3>
+<ul>
+<li>E-paper refreshes are slow. The frame queues one refresh at a time.</li>
+<li>A full refresh takes several seconds and may flicker; this is normal for six-color e-paper.</li>
+<li>The frame resumes a running slideshow after power loss if the current photo is still eligible.</li>
+</ul>
+<hr />
+<h2 id="9-extensions">9. Extensions</h2>
+<p>The <strong>Extensions</strong> tab manages optional dashboards that temporarily replace the slideshow.</p>
+<h3 id="clock-weather">Clock &amp; Weather</h3>
+<p>Shows an analog or digital clock plus weather from Open-Meteo.</p>
+<p><strong>Setup:</strong><br />
+1. Tap <strong>Clock &amp; Weather</strong>.<br />
+2. Tap <strong>Activate</strong>.<br />
+3. Search for your location and select it.<br />
+4. Choose layout, temperature unit (Fahrenheit / Celsius), and wind unit (mph / km/h).<br />
+5. Set update interval.<br />
+6. Tap <strong>Save</strong>.</p>
+<p><strong>Layouts:</strong><br />
+- Analog<br />
+- Analog modern<br />
+- Digital<br />
+- Digital + weather<br />
+- Analog + weather<br />
+- Weather only</p>
+<p>The extension updates automatically and displays the dashboard at the configured interval.</p>
+<h3 id="calendar">Calendar</h3>
+<p>Shows events from up to four ICS/iCal feeds.</p>
+<p><strong>Setup:</strong><br />
+1. Tap <strong>Calendar</strong>.<br />
+2. Tap <strong>Activate</strong>.<br />
+3. Add a feed name, URL, and color.<br />
+4. Set the UTC offset for your timezone.<br />
+5. Set sync interval and layout.<br />
+6. Tap <strong>Save</strong>.</p>
+<p><strong>Layouts:</strong><br />
+- Agenda<br />
+- Agenda + mini month<br />
+- Week<br />
+- Month<br />
+- Clock + agenda<br />
+- Clock + weather + agenda</p>
+<p>The frame fetches the feeds over HTTPS and caches events locally.</p>
+<p><strong>Privacy modes:</strong><br />
+- <strong>Full:</strong> Shows summary, location, and time.<br />
+- <strong>Busy:</strong> Shows only "Busy" instead of summaries.<br />
+- <strong>Time only:</strong> Hides summary and location.</p>
+<h3 id="returning-to-photos">Returning to photos</h3>
+<p>To stop an extension and return to the photo slideshow:</p>
+<ol>
+<li>Go to <strong>Extensions</strong>.</li>
+<li>Tap <strong>Deactivate</strong> on the active dashboard.</li>
+<li>The slideshow resumes with its normal schedule.</li>
+</ol>
+<hr />
+<h2 id="10-settings">10. Settings</h2>
+<h3 id="device-settings">Device settings</h3>
+<ul>
+<li><strong>Device name:</strong> Display name shown in the web UI header.</li>
+<li><strong>Hostname:</strong> Used for <code>http://&lt;hostname&gt;.local</code> mDNS access. Default is <code>dynapix</code>.</li>
+<li><strong>Panel mount:</strong> Left or right connector orientation. Affects how uploaded photos are packed for the display.</li>
+</ul>
+<h3 id="wi-fi-settings">Wi-Fi settings</h3>
+<ul>
+<li><strong>Scan Wi-Fi:</strong> Discovers nearby networks.</li>
+<li><strong>Wi-Fi name:</strong> SSID to join.</li>
+<li><strong>Password:</strong> Network password. Leave blank for open networks.</li>
+<li><strong>Open network:</strong> Disables the password field.</li>
+</ul>
+<p>Saving Wi-Fi restarts the frame.</p>
+<h3 id="storage">Storage</h3>
+<p>The Settings page shows total and used flash storage. Each photo uses exactly 120 KB.</p>
+<hr />
+<h2 id="11-maintenance">11. Maintenance</h2>
+<p>Available at the bottom of <strong>Settings</strong>:</p>
+<ul>
+<li><strong>Clean up storage:</strong> Removes incomplete uploads and rebuilds the photo index.</li>
+<li><strong>Restart device:</strong> Reboots the ESP32.</li>
+<li><strong>Reset slideshow:</strong> Resets interval to 5 minutes, mode to sequential, and pauses playback.</li>
+<li><strong>Factory reset:</strong> Deletes all photos, categories, settings, and saved Wi-Fi. Use with caution.</li>
+</ul>
+<hr />
+<h2 id="12-storage-limits">12. Storage &amp; Limits</h2>
+<table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Max photos</td>
+<td>90</td>
+</tr>
+<tr>
+<td>Max categories</td>
+<td>32</td>
+</tr>
+<tr>
+<td>Photo file size</td>
+<td>120 KB each</td>
+</tr>
+<tr>
+<td>Supported formats (source)</td>
+<td>HEIC, HEIF, JPG, PNG, WebP, BMP, AVIF</td>
+</tr>
+<tr>
+<td>Display resolution</td>
+<td>600 × 400</td>
+</tr>
+<tr>
+<td>Native panel memory</td>
+<td>400 × 600 (rotated at upload time)</td>
+</tr>
+</tbody>
+</table>
+<p>Storage usage is shown in the Library and Settings pages.</p>
+<hr />
+<h2 id="13-troubleshooting">13. Troubleshooting</h2>
+<h3 id="cannot-connect-to-the-frame">Cannot connect to the frame</h3>
+<ol>
+<li>Confirm the frame is powered and the USB cable supplies enough current.</li>
+<li>Connect to <code>DynaPix-EPaper</code> and use <code>http://192.168.4.1</code>.</li>
+<li>If mDNS does not resolve, use the IP address shown in Settings.</li>
+</ol>
+<h3 id="upload-fails">Upload fails</h3>
+<ol>
+<li>Check free storage in the Library.</li>
+<li>Reduce the number of photos in one batch.</li>
+<li>Try a different browser, especially for HEIC files.</li>
+<li>Check that the photo file is not corrupt.</li>
+</ol>
+<h3 id="slideshow-is-stuck-on-one-photo">Slideshow is stuck on one photo</h3>
+<ol>
+<li>Make sure at least one photo is selected in the Library.</li>
+<li>Check that the category filter is not excluding all selected photos.</li>
+<li>The display may be busy refreshing; wait for it to finish.</li>
+</ol>
+<h3 id="display-is-blank">Display is blank</h3>
+<p>E-paper only changes when a new image is sent. Start the slideshow, display a photo manually, or activate an extension.</p>
+<h3 id="colors-look-wrong">Colors look wrong</h3>
+<p>The panel has a fixed six-color palette. The converter does its best with dithering, but some images will always look different from an LCD screen. Try a different quality preset, dither mode, or tone controls.</p>
+<h3 id="wi-fi-password-lost">Wi-Fi password lost</h3>
+<p>After a factory reset, saved credentials are gone. Reconnect to <code>DynaPix-EPaper</code> and reconfigure Wi-Fi.</p>
+<h3 id="frame-becomes-warm">Frame becomes warm</h3>
+<p>The display refreshes consume power. This is normal during updates; the frame runs cool between refreshes.</p>
+<hr />
+<h2 id="14-safety-care">14. Safety &amp; Care</h2>
+<ul>
+<li>Use only a 5 V USB-C power source.</li>
+<li>Do not bend or press on the e-paper display.</li>
+<li>Avoid exposing the frame to extreme temperatures or humidity.</li>
+<li>E-paper panels can retain a ghost image if left in direct sunlight for long periods.</li>
+<li>The panel refreshes slowly; frequent short intervals will shorten display lifetime and consume more power.</li>
+</ul>
+<hr />
+<h2 id="appendix-default-network">Appendix: Default network</h2>
+<ul>
+<li><strong>Fallback AP SSID:</strong> <code>DynaPix-EPaper</code></li>
+<li><strong>Fallback AP password:</strong> <code>dynapix6</code></li>
+<li><strong>Default hostname:</strong> <code>dynapix</code></li>
+<li><strong>Default URL:</strong> <code>http://dynapix.local</code></li>
+</ul>
+</body>
+</html>
