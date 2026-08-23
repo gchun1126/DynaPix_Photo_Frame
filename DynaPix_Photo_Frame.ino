@@ -15,10 +15,6 @@
 // 400 x 600 native panel memory
 // ============================================================
 
-// Initial Wi-Fi used until changed from Settings.
-const char* BOOTSTRAP_WIFI_SSID = "GaryWireN";
-const char* BOOTSTRAP_WIFI_PASS = "garychun";
-
 // Permanent fallback access point.
 const char* FALLBACK_AP_SSID = "DynaPix-EPaper";
 const char* FALLBACK_AP_PASS = "dynapix6";
@@ -1752,12 +1748,12 @@ void loadSettings() {
 
   activeSSID = preferences.getString(
     "ssid",
-    BOOTSTRAP_WIFI_SSID
+    ""
   );
 
   activePassword = preferences.getString(
     "password",
-    BOOTSTRAP_WIFI_PASS
+    ""
   );
 
   panelMount = preferences.getString(

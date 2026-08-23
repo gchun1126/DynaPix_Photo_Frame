@@ -2070,6 +2070,7 @@ let activePhotoId = "";
 let slideshowDirty = false;
 let slideshowSaving = false;
 let displayBusy = false;
+let wifiDirty = false;
 
 let settings = {
  mount: "left"
@@ -6826,13 +6827,38 @@ $("scanNetworks").onclick =
    const data =
     await api("/api/wifi/scan");
 
-   $("networkList").innerHTML =
-    '<option value="">Choose a network</option>' +
-    data.networks.map(network => `
-     <option value="${escapeHtml(network.ssid)}">
-      ${escapeHtml(network.ssid)} (${network.rssi} dBm)
-     </option>
-    `).join("");
+   const select = $("networkList");
+
+   select.innerHTML = "";
+
+   const placeholder =
+    document.createElement(
+     "option"
+    );
+
+   placeholder.value = "";
+   placeholder.textContent =
+    "Choose a network";
+
+   select.appendChild(placeholder);
+
+   for (
+    const network of data.networks
+   ) {
+    const option =
+     document.createElement(
+      "option"
+     );
+
+    option.value = network.ssid;
+    option.textContent =
+     network.ssid +
+     " (" +
+     network.rssi +
+     " dBm)";
+
+    select.appendChild(option);
+   }
   } catch (error) {
    alert(error.message);
   } finally {
@@ -6844,17 +6870,31 @@ $("scanNetworks").onclick =
   }
  };
 
-$("networkList").onchange =
+$("networkList").addEventListener(
+ "change",
  event => {
   if (event.target.value) {
    $("wifiSSID").value =
     event.target.value;
+
+   wifiDirty = true;
   }
- };
+ }
+);
 
 $("openNetwork").onchange = () => {
  $("wifiPassword").disabled =
   $("openNetwork").checked;
+
+ wifiDirty = true;
+};
+
+$("wifiSSID").oninput = () => {
+ wifiDirty = true;
+};
+
+$("wifiPassword").oninput = () => {
+ wifiDirty = true;
 };
 
 $("saveWiFi").onclick =
@@ -6890,6 +6930,8 @@ $("saveWiFi").onclick =
       : "0"
    })
   );
+
+  wifiDirty = false;
 
   alert(
    "ESP32 is restarting. Reconnect using dynapix.local or DynaPix-EPaper."
@@ -6955,6 +6997,8 @@ $("factoryReset").onclick =
   )) {
    return;
   }
+
+  wifiDirty = false;
 
   await api(
    "/api/maintenance/factory-reset",
@@ -7066,9 +7110,18 @@ async function refreshStatus(
   $("hostnamePreview").textContent =
    status.hostname;
 
-  $("wifiSSID").value =
-   status.ssid ||
-   "";
+  if (
+   forceFields ||
+   !wifiDirty
+  ) {
+   $("wifiSSID").value =
+    status.ssid ||
+    "";
+
+   if (forceFields) {
+    wifiDirty = false;
+   }
+  }
 
   $("wifiStatus").textContent =
    status.stationConnected
