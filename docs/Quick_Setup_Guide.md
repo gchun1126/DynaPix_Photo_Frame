@@ -2,8 +2,6 @@
 
 Get your DynaPix frame online and showing photos in about 10 minutes.
 
-![DynaPix web UI on a phone](screenshots/mobile_add_photos.png)
-
 ---
 
 ## What you need
@@ -77,8 +75,6 @@ After the frame restarts:
 4. Tap **Convert & Upload All**.
 
 Wait for the conversion and upload to complete. A 120 KB file is sent to the frame for each photo.
-
-![Add Photos page on a desktop browser](screenshots/desktop_add_photos.png)
 
 ---
 
