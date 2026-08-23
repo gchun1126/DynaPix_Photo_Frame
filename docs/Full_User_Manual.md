@@ -103,6 +103,8 @@ The web interface has four main tabs:
 | **◷ Extensions** | Enable clock/weather or calendar dashboards |
 | **⚙ Settings** | Wi-Fi, device name, hostname, panel mount, factory reset |
 
+![DynaPix web UI on a desktop browser](screenshots/desktop_add_photos.png)
+
 ### Header
 
 The top bar shows the device name and connection status. The status updates every few seconds.
@@ -110,6 +112,8 @@ The top bar shows the device name and connection status. The status updates ever
 ### Mobile layout
 
 On narrow screens, the navigation bar moves to the bottom for thumb access.
+
+![DynaPix web UI on a phone](screenshots/mobile_add_photos.png)
 
 ---
 
@@ -140,6 +144,8 @@ The browser performs the conversion; iPhone Safari is recommended for HEIC suppo
    - Dithering mode
    - Advanced tone controls
 5. Tap **Convert & Upload All**.
+
+![Add Photos page on a desktop browser](screenshots/desktop_add_photos.png)
 
 ### Quality presets
 
